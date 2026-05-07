@@ -1,0 +1,168 @@
+name: Release
+
+# Triggers on tag push (e.g. v0.1.0) or manual dispatch.
+# Builds Windows, macOS (universal), and Linux (x64), and uploads installers
+# to a GitHub Release for the same tag.
+#
+# Flow:
+#   1. create-release  — finds or creates a draft release for the tag.
+#   2. build           — three matrix jobs upload their artifacts to it.
+#   3. publish-release — flips the release from draft to published.
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag (e.g. v0.1.0). Must already exist as a git tag.'
+        required: true
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      release_id: ${{ steps.create-release.outputs.result }}
+      tag_name: ${{ steps.tag.outputs.value }}
+    steps:
+      - name: Resolve tag
+        id: tag
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "value=${{ github.event.inputs.tag }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "value=${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Find or create draft release
+        id: create-release
+        uses: actions/github-script@v7
+        env:
+          TAG: ${{ steps.tag.outputs.value }}
+        with:
+          script: |
+            const tag = process.env.TAG
+            try {
+              const existing = await github.rest.repos.getReleaseByTag({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                tag,
+              })
+              return existing.data.id
+            } catch (e) {
+              if (e.status !== 404) throw e
+              const { data } = await github.rest.repos.createRelease({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                tag_name: tag,
+                name: `ccbar ${tag}`,
+                body: `ccbar ${tag} — see commit history for changes.`,
+                draft: true,
+                prerelease: true,
+              })
+              return data.id
+            }
+
+  build:
+    needs: create-release
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # macOS universal binary: ship .app + .dmg.
+          - platform: macos-latest
+            args: '--target universal-apple-darwin --bundles app,dmg'
+            rust-targets: 'aarch64-apple-darwin,x86_64-apple-darwin'
+          # Linux x64: ship .deb + AppImage. Skip .rpm (rpmbuild absent on
+          # ubuntu-22.04 runners; tauri.conf.json's `targets: "all"` would
+          # otherwise fail when it tried to invoke it).
+          - platform: ubuntu-22.04
+            args: '--bundles deb,appimage'
+            rust-targets: ''
+          # Windows x64: ship .msi (WiX) + setup.exe (NSIS).
+          - platform: windows-latest
+            args: '--bundles msi,nsis'
+            rust-targets: ''
+
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.rust-targets }}
+
+      - name: Cache Rust build
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+
+      - name: Install Linux dependencies
+        if: matrix.platform == 'ubuntu-22.04'
+        # Tauri 2 official Ubuntu deps. libayatana-appindicator3-dev replaces
+        # the deprecated libappindicator3-dev. libxdo-dev is required by
+        # tauri-plugin-positioner for tray-window placement.
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential \
+            curl \
+            file \
+            wget \
+            libwebkit2gtk-4.1-dev \
+            libayatana-appindicator3-dev \
+            librsvg2-dev \
+            libssl-dev \
+            libxdo-dev \
+            libgtk-3-dev \
+            patchelf
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+          run_install: false
+
+      - name: Install frontend dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build and upload to release
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          releaseId: ${{ needs.create-release.outputs.release_id }}
+          args: ${{ matrix.args }}
+
+  publish-release:
+    needs: [create-release, build]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Publish release
+        uses: actions/github-script@v7
+        env:
+          RELEASE_ID: ${{ needs.create-release.outputs.release_id }}
+        with:
+          script: |
+            await github.rest.repos.updateRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              release_id: Number(process.env.RELEASE_ID),
+              draft: false,
+              prerelease: true,
+            })

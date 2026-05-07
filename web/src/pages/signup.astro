@@ -1,0 +1,83 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Reveal from "../components/Reveal.tsx";
+---
+
+<BaseLayout title="ccbar — join the waitlist">
+  <section class="pt-14 pb-16 md:pt-24 md:pb-24">
+    <Reveal mode="fade-up" client:load className="mx-auto max-w-2xl text-center">
+      <span class="eyebrow">Waitlist</span>
+      <h1 class="display mt-6 text-[clamp(40px,6vw,68px)] leading-[1.0] tracking-[-0.025em] text-[var(--color-text)]">
+        Join the{" "}
+        <span class="text-[var(--color-text-dim)]">waitlist.</span>
+      </h1>
+      <p class="mx-auto mt-5 max-w-[52ch] text-[16.5px] leading-relaxed text-[var(--color-text-dim)]">
+        I'll send exactly one email — when the online dashboard ships. No drip
+        campaign. No "growth tips". No referral program.
+      </p>
+    </Reveal>
+
+    <Reveal mode="fade-up" client:visible className="mx-auto mt-12 max-w-lg">
+      <div class="card-bezel">
+        <div class="card-bezel-inner">
+          <form
+            action="#"
+            method="post"
+            onsubmit="event.preventDefault(); document.getElementById('placeholder-note').classList.remove('hidden');"
+          >
+            <label for="email" class="text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[var(--color-text-faint)]">
+              Email address
+            </label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              required
+              placeholder="you@example.com"
+              class="input-field mt-2.5"
+            />
+            <button type="submit" class="btn-primary mt-5 w-full justify-center">
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 13L13 3M13 3H6M13 3V10"/></svg>
+              Submit to waitlist
+            </button>
+
+            <div id="placeholder-note" class="alert-soft mt-6 hidden">
+              <p class="font-semibold text-[var(--pastel-yellow-fg)]">
+                This form isn't wired up yet.
+              </p>
+              <p class="mt-2 text-[var(--pastel-yellow-fg)] opacity-80">
+                v0 of ccbar-web ships without a backend. v1 will store your
+                email in a single Postgres table behind a Cloudflare Worker.
+              </p>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="mt-8 grid grid-cols-2 gap-3 text-[12.5px] font-medium text-[var(--color-text-faint)]">
+        <div class="rounded-lg bg-white p-4 border border-[var(--color-hairline)]">
+          <div class="text-[10px] font-semibold uppercase tracking-widest text-[var(--color-muted)]">
+            v1 will be
+          </div>
+          <ul class="mt-2 space-y-1.5">
+            <li>· Postgres-backed</li>
+            <li>· Cloudflare Workers</li>
+            <li>· Double opt-in</li>
+            <li>· One-click delete</li>
+          </ul>
+        </div>
+        <div class="rounded-lg bg-white p-4 border border-[var(--color-hairline)]">
+          <div class="text-[10px] font-semibold uppercase tracking-widest text-[var(--color-muted)]">
+            What you'll get
+          </div>
+          <ul class="mt-2 space-y-1.5">
+            <li>· One email when ready</li>
+            <li>· Beta access on day 0</li>
+            <li>· No marketing</li>
+            <li>· Easy unsubscribe</li>
+          </ul>
+        </div>
+      </div>
+    </Reveal>
+  </section>
+</BaseLayout>

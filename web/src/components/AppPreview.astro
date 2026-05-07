@@ -1,0 +1,65 @@
+---
+type Variant =
+  | "full"
+  | "hero"
+  | "daily"
+  | "models"
+  | "windows"
+  | "quota-good"
+  | "quota-low"
+  | "quota-stale"
+  | "login-gate"
+  | "tray-fresh"
+  | "tray-empty"
+  | "tray-critical";
+
+interface Props {
+  variant?: Variant;
+  alt?: string;
+  caption?: string;
+  ratio?: string;            // e.g. "16/10", "4/3", "auto"
+  tight?: boolean;           // smaller padding + softer shadow (for inline detail shots)
+  noFrame?: boolean;         // raw <img>, no Double-Bezel frame (used for quota pill insets)
+  class?: string;
+}
+
+const {
+  variant = "full",
+  alt = "ccbar desktop app",
+  caption,
+  ratio = "auto",
+  tight = false,
+  noFrame = false,
+  class: extra = "",
+} = Astro.props;
+
+const src = `/screenshots/${variant}.png`;
+const ratioStyle = ratio === "auto" ? "" : `aspect-ratio: ${ratio};`;
+const imgCls =
+  ratio === "auto"
+    ? "block h-auto w-full"
+    : "absolute inset-0 block h-full w-full object-cover object-top";
+---
+
+<figure class={`my-2 ${extra}`.trim()}>
+  {noFrame ? (
+    <div class="hover-zoom rounded-lg overflow-hidden ring-1 ring-black/5">
+      <div class="relative w-full" style={ratioStyle}>
+        <img src={src} alt={alt} class={imgCls} loading="lazy" />
+      </div>
+    </div>
+  ) : (
+    <div class={`hover-zoom shot-frame ${tight ? "tight" : ""}`}>
+      <div class="shot-inner">
+        <div class="relative w-full" style={ratioStyle}>
+          <img src={src} alt={alt} class={imgCls} loading="lazy" />
+        </div>
+      </div>
+    </div>
+  )}
+  {caption && (
+    <figcaption class="mt-4 px-2 text-[13px] text-[var(--color-text-dim)]">
+      {caption}
+    </figcaption>
+  )}
+</figure>

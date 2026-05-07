@@ -1,0 +1,75 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import AppPreview from "../components/AppPreview.astro";
+import Reveal from "../components/Reveal.tsx";
+---
+
+<BaseLayout title="ccbar — login">
+  <section class="pt-14 pb-16 md:pt-24 md:pb-24">
+    <Reveal mode="fade-up" client:load className="mx-auto max-w-2xl text-center">
+      <span class="eyebrow">Sign in</span>
+      <h1 class="display mt-6 text-[clamp(40px,6vw,68px)] leading-[1.0] tracking-[-0.025em] text-[var(--color-text)]">
+        No accounts{" "}
+        <span class="text-[var(--color-text-dim)]">yet.</span>
+      </h1>
+      <p class="mx-auto mt-5 max-w-[52ch] text-[16.5px] leading-relaxed text-[var(--color-text-dim)]">
+        ccbar v0 is a desktop app — there's nothing to log into. The web
+        dashboard with sign-in is on the v1 list.
+      </p>
+    </Reveal>
+
+    <div class="mx-auto mt-14 grid max-w-5xl grid-cols-1 gap-8 lg:grid-cols-12">
+      <Reveal mode="fade-up" client:visible className="lg:col-span-7">
+        <div class="card-bezel">
+          <div class="card-bezel-inner">
+            <div class="flex items-center gap-2">
+              <span class="eyebrow">Stub form</span>
+              <span class="pill-chip !bg-[var(--pastel-yellow-bg)] !text-[var(--pastel-yellow-fg)] !border-[#f4e9c2]">disabled</span>
+            </div>
+            <label class="mt-5 block text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[var(--color-text-faint)]">
+              Email address
+            </label>
+            <input
+              type="email"
+              placeholder="you@example.com"
+              disabled
+              class="input-field mt-2.5 cursor-not-allowed opacity-60"
+            />
+            <button
+              disabled
+              class="btn-primary mt-4 w-full cursor-not-allowed justify-center opacity-60"
+            >
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 13L13 3M13 3H6M13 3V10"/></svg>
+              Send magic link
+            </button>
+            <p class="mt-5 text-[13px] text-[var(--color-text-faint)]">
+              Bookmark this URL — when v1 ships, it'll work without a redirect.
+            </p>
+          </div>
+        </div>
+      </Reveal>
+
+      <Reveal mode="fade-up" client:visible className="lg:col-span-5">
+        <div class="card-bezel">
+          <div class="card-bezel-inner feature">
+            <span class="eyebrow accent">v1 plan</span>
+            <p class="mt-4 text-[15.5px] leading-relaxed text-[var(--color-text-dim)]">
+              Logging in will use email + magic link, or GitHub OAuth — whichever
+              ships first. No passwords. No SMS codes. No social sign-in that
+              secretly tracks you.
+            </p>
+            <a href="/signup" class="text-link mt-5 inline-block">
+              Join the waitlist instead →
+            </a>
+            <div class="mt-7">
+              <AppPreview variant="quota-good" ratio="auto" tight noFrame alt="quota pill" />
+              <p class="mt-2 text-[11.5px] text-[var(--color-text-faint)]">
+                The same chip you'll see online.
+              </p>
+            </div>
+          </div>
+        </div>
+      </Reveal>
+    </div>
+  </section>
+</BaseLayout>

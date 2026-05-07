@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024" role="img" aria-label="ccbar logo">
+  <rect width="1024" height="1024" fill="#F7F6F3"/>
+  <path d="M 162 572 Q 162 540 194 540 L 330 540 Q 362 540 362 572 L 362 860 L 162 860 Z" fill="#111111"/>
+  <path d="M 412 402 Q 412 370 444 370 L 580 370 Q 612 370 612 402 L 612 860 L 412 860 Z" fill="#111111"/>
+  <path d="M 662 232 Q 662 200 694 200 L 830 200 Q 862 200 862 232 L 862 860 L 662 860 Z" fill="#111111"/>
+  <rect x="120" y="860" width="784" height="8" fill="#111111"/>
+</svg>

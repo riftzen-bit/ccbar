@@ -1,0 +1,388 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import AppPreview from "../components/AppPreview.astro";
+import Bento from "../components/Bento.astro";
+import BentoCell from "../components/BentoCell.astro";
+import Reveal from "../components/Reveal.tsx";
+---
+
+<BaseLayout>
+  {/* ====================================================================
+   *  HERO — Editorial Split: typography left, screenshot card cluster right.
+   *  Massive type, eyebrow tag, two CTAs (primary + secondary), subhead.
+   * ==================================================================== */}
+  <section class="grid grid-cols-1 items-center gap-12 pt-14 pb-16 md:pt-24 md:pb-24 lg:grid-cols-12 lg:gap-10">
+    <Reveal mode="stagger" client:load className="lg:col-span-7">
+      <span class="eyebrow">ccbar 0.2 · now with OpenAI Codex</span>
+      <h1
+        class="display mt-6 text-[clamp(44px,7.5vw,84px)] leading-[0.96] tracking-[-0.028em] text-[var(--color-text)]"
+      >
+        Meter your{" "}
+        <span class="text-[var(--color-text-dim)]">Claude&nbsp;Code</span>{" "}
+        and{" "}
+        <span class="text-[var(--color-text-dim)]">OpenAI&nbsp;Codex</span>{" "}
+        spend.
+      </h1>
+      <p
+        class="mt-7 max-w-[58ch] text-[18px] leading-[1.55] font-medium text-[var(--color-text-dim)]"
+      >
+        ccbar is a tiny desktop app that reads <code>~/.claude/</code> and{" "}
+        <code>~/.codex/</code> on disk and surfaces live 5h + 7-day windows for
+        both providers. No accounts, no servers, no telemetry — just the
+        receipt your CLI never quite gives you.
+      </p>
+      <div class="mt-9 flex flex-wrap items-center gap-3">
+        <a href="/install" class="btn-primary">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 13L13 3M13 3H6M13 3V10"/></svg>
+          Install ccbar
+        </a>
+        <a href="https://github.com" rel="noopener" class="btn-secondary">
+          View on GitHub
+        </a>
+        <span class="ml-1 text-[13px] font-medium text-[var(--color-text-faint)]">
+          Free · open source · no signup
+        </span>
+      </div>
+    </Reveal>
+
+    {/* Right column — screenshot cluster with subtle Z-axis cascade */}
+    <Reveal mode="scale-pop" client:load className="lg:col-span-5">
+      <div class="relative h-full min-h-[420px]">
+        <div
+          class="absolute right-0 top-0 w-full max-w-[420px] rotate-[2deg] transition-transform duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] hover:rotate-0"
+        >
+          <AppPreview
+            variant="tray-fresh"
+            ratio="auto"
+            alt="ccbar tray popup with 5h and weekly bars"
+          />
+        </div>
+        <div
+          class="absolute -left-4 top-32 w-full max-w-[460px] -rotate-[3deg] transition-transform duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] hover:rotate-0"
+        >
+          <AppPreview
+            variant="hero"
+            ratio="auto"
+            alt="ccbar hero panel with sparkline"
+          />
+        </div>
+      </div>
+    </Reveal>
+  </section>
+
+  {/* ====================================================================
+   *  FULL DASHBOARD PREVIEW — full-bleed Double-Bezel frame
+   * ==================================================================== */}
+  <section class="py-16 md:py-24">
+    <Reveal mode="fade-up" client:visible>
+      <div class="text-center">
+        <span class="eyebrow">The whole window</span>
+        <h2 class="display mt-5 text-[clamp(32px,5vw,52px)] leading-[1.05] tracking-[-0.022em] text-[var(--color-text)]">
+          Four panels, one paperback-sized window.
+        </h2>
+        <p class="mx-auto mt-4 max-w-[60ch] text-[16.5px] text-[var(--color-text-dim)]">
+          Today, daily activity, time windows, models — auto-refreshing every
+          fifteen seconds, all read straight from disk.
+        </p>
+      </div>
+      <div class="mt-12">
+        <AppPreview
+          variant="full"
+          alt="ccbar full dashboard at noon"
+          caption=""
+        />
+      </div>
+    </Reveal>
+  </section>
+
+  {/* ====================================================================
+   *  TWO PROVIDERS — Claude + Codex tabs, one window
+   * ==================================================================== */}
+  <section class="py-16 md:py-24">
+    <Reveal mode="fade-up" client:visible>
+      <div class="grid grid-cols-1 items-end gap-8 lg:grid-cols-12 lg:gap-10">
+        <div class="lg:col-span-7">
+          <span class="eyebrow accent">Two providers, one window</span>
+          <h2 class="display mt-5 text-[clamp(28px,4.5vw,46px)] leading-[1.05] tracking-[-0.022em] text-[var(--color-text)]">
+            Claude tab. Codex tab. Same numbers, same shape.
+          </h2>
+          <p class="mt-5 max-w-[58ch] text-[16px] leading-relaxed text-[var(--color-text-dim)]">
+            Each tab is a complete dashboard for one provider — Hero today, 30-day
+            sparkline, time windows with API value vs. flat subscription, model
+            breakdown. Switching tabs swaps the data source; the layout never
+            moves on you.
+          </p>
+        </div>
+        <div class="lg:col-span-5">
+          <ul class="space-y-3 text-[14.5px] leading-relaxed text-[var(--color-text-dim)]">
+            <li class="flex items-start gap-3">
+              <span class="mt-1.5 inline-block h-2 w-2 shrink-0 rounded-sm bg-[var(--color-ink)]"></span>
+              <span>
+                <strong class="text-[var(--color-text)]">Claude tab</strong> —
+                walks <code>~/.claude/projects/&lt;cwd&gt;/&lt;sessionId&gt;.jsonl</code>,
+                dedupes assistant messages by <code>message.id</code>, prices
+                Opus / Sonnet / Haiku separately.
+              </span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="mt-1.5 inline-block h-2 w-2 shrink-0 rounded-sm bg-[#4A4A48]"></span>
+              <span>
+                <strong class="text-[var(--color-text)]">Codex tab</strong> —
+                walks <code>~/.codex/sessions/**/*.jsonl</code> + archived,
+                dedupes <code>token_count</code> events, attributes tokens to
+                the <code>turn_context.model</code> in effect for that turn.
+              </span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="mt-1.5 inline-block h-2 w-2 shrink-0 rounded-sm bg-[var(--pastel-green-fg)]"></span>
+              <span>
+                <strong class="text-[var(--color-text)]">Tray switcher</strong>{" "}
+                — system tray popup has the same Claude / Codex tabs at 340×280px,
+                so the bar you stare at all day always reflects the provider you
+                care about right now.
+              </span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </Reveal>
+  </section>
+
+  {/* ====================================================================
+   *  CODEX OAUTH — small explanation card
+   * ==================================================================== */}
+  <section class="py-12 md:py-16">
+    <Reveal mode="fade-up" client:visible>
+      <div class="card-bezel">
+        <div class="card-bezel-inner !p-8 md:!p-12">
+          <div class="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-12">
+            <div class="lg:col-span-7">
+              <span class="eyebrow">Codex sign-in</span>
+              <h3 class="display mt-4 text-[clamp(24px,3.5vw,34px)] leading-[1.1] tracking-[-0.02em] text-[var(--color-text)]">
+                Connect once, then it's local-first.
+              </h3>
+              <p class="mt-5 max-w-[60ch] text-[15.5px] leading-relaxed text-[var(--color-text-dim)]">
+                Click <strong class="text-[var(--color-text)]">Continue with OpenAI</strong> on the Codex tab. Browser opens to{" "}
+                <code>auth.openai.com</code>, you sign in, ccbar receives the OAuth
+                token via a short-lived loopback listener on{" "}
+                <code>localhost:1455</code>, and stores it in its own keystore at{" "}
+                <code>&lt;config&gt;/ccbar/codex-auth.json</code>.
+              </p>
+              <p class="mt-4 max-w-[60ch] text-[14.5px] leading-relaxed text-[var(--color-text-faint)]">
+                We never touch <code>~/.codex/auth.json</code> (Codex CLI's own
+                token). The token never leaves the HTTPS request to OpenAI's
+                token endpoint, and the frontend only sees{" "}
+                <code>{"{ connected, email, expiresAt, sessionCount }"}</code> —
+                never the bearer.
+              </p>
+            </div>
+            <div class="lg:col-span-5">
+              <div class="flex flex-col gap-3 text-[13.5px]">
+                <div class="rounded-md border border-[var(--color-hairline)] bg-[var(--color-bg-soft)] px-4 py-3">
+                  <div class="num text-[10px] uppercase tracking-widest text-[var(--color-text-faint)]">
+                    Auth host
+                  </div>
+                  <div class="mt-1 num font-semibold text-[var(--color-ink)]">
+                    auth.openai.com
+                  </div>
+                </div>
+                <div class="rounded-md border border-[var(--color-hairline)] bg-[var(--color-bg-soft)] px-4 py-3">
+                  <div class="num text-[10px] uppercase tracking-widest text-[var(--color-text-faint)]">
+                    Loopback port
+                  </div>
+                  <div class="mt-1 num font-semibold text-[var(--color-ink)]">
+                    127.0.0.1:1455 (fallback :1457)
+                  </div>
+                </div>
+                <div class="rounded-md border border-[var(--color-hairline)] bg-[var(--color-bg-soft)] px-4 py-3">
+                  <div class="num text-[10px] uppercase tracking-widest text-[var(--color-text-faint)]">
+                    Scope
+                  </div>
+                  <div class="mt-1 num font-semibold text-[var(--color-ink)]">
+                    openid profile email offline_access
+                  </div>
+                </div>
+                <div class="rounded-md border border-[var(--color-hairline)] bg-[var(--color-bg-soft)] px-4 py-3">
+                  <div class="num text-[10px] uppercase tracking-widest text-[var(--color-text-faint)]">
+                    Token storage
+                  </div>
+                  <div class="mt-1 num font-semibold text-[var(--color-ink)] break-all">
+                    &lt;config&gt;/ccbar/codex-auth.json
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Reveal>
+  </section>
+
+  {/* ====================================================================
+   *  BENTO — features in an asymmetric grid, each cell a Double-Bezel card.
+   *  Math: row1 6×2 + 6×1, row2 4×1 + 2×1, row3 12×1 — interlocks gaplessly
+   *  (with our gap-4 visual gutter).
+   * ==================================================================== */}
+  <section class="py-16 md:py-24">
+    <div class="mb-10 flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <span class="eyebrow">Features</span>
+        <h2 class="display mt-4 text-[clamp(28px,4.5vw,44px)] leading-[1.05] tracking-[-0.022em] text-[var(--color-text)]">
+          Built like a meter, not a dashboard.
+        </h2>
+      </div>
+      <p class="max-w-[44ch] text-[15px] text-[var(--color-text-dim)]">
+        Quiet defaults. Real numbers. No fake gauges, no synthetic averages,
+        no "growth" tips.
+      </p>
+    </div>
+
+    <Reveal mode="stagger" client:visible childSelector=".card-bezel">
+      <Bento>
+        <BentoCell col={6} row={2} feature image>
+          <a href="#today" class="hover-zoom block h-full">
+            <img
+              src="/screenshots/hero.png"
+              alt="ccbar Today panel"
+              class="block h-full w-full object-cover object-top"
+              loading="lazy"
+            />
+          </a>
+        </BentoCell>
+
+        <BentoCell col={6} row={1}>
+          <span class="eyebrow">Sparkline</span>
+          <h3 class="display mt-3 text-2xl text-[var(--color-text)]">
+            Fourteen days, no axis decoration.
+          </h3>
+          <p class="mt-2.5 text-[14.5px] leading-relaxed text-[var(--color-text-dim)]">
+            Two-hundred-pixel area chart, peak day annotated, dashed average
+            line — just the shape of your usage.
+          </p>
+          <div class="mt-5">
+            <AppPreview
+              variant="daily"
+              ratio="auto"
+              tight
+              alt="30-day daily activity"
+            />
+          </div>
+        </BentoCell>
+
+        <BentoCell col={4} row={1}>
+          <span class="eyebrow">Models</span>
+          <h3 class="display mt-3 text-2xl text-[var(--color-text)]">
+            Side by side, by API list dollars.
+          </h3>
+          <p class="mt-2.5 text-[14px] leading-relaxed text-[var(--color-text-dim)]">
+            Opus, Sonnet, Haiku — each in its own row with an honest cost.
+            Haiku 4.5 priced separately from 3.5.
+          </p>
+          <div class="mt-auto pt-5 flex items-baseline gap-2 text-[var(--color-ink)]">
+            <span class="num text-3xl font-bold">4</span>
+            <span class="num text-[10.5px] font-semibold uppercase tracking-widest text-[var(--color-text-faint)]">
+              distinct · 30d
+            </span>
+          </div>
+        </BentoCell>
+
+        <BentoCell col={2} row={1} feature>
+          <span class="eyebrow accent">Quota</span>
+          <p class="mt-3 text-[13.5px] leading-snug text-[var(--color-text-dim)]">
+            Goes faint when stale. No fake gauges.
+          </p>
+          <div class="mt-auto pt-3">
+            <AppPreview
+              variant="quota-good"
+              ratio="auto"
+              tight
+              noFrame
+              alt="quota pill"
+            />
+          </div>
+        </BentoCell>
+
+        <BentoCell col={12} row={1} feature>
+          <div class="flex flex-col items-start gap-4 md:flex-row md:items-center md:justify-between">
+            <div class="max-w-[58ch]">
+              <span class="eyebrow">Why ccbar exists</span>
+              <p class="mt-3 text-[16px] leading-relaxed text-[var(--color-text)]">
+                Claude Code never quite tells you how much you've spent today.
+                ccbar reads the JSONL files it writes after every assistant
+                message and shows the receipt — with live 5h and weekly bars
+                from the API itself.
+              </p>
+            </div>
+            <a href="/install" class="btn-primary">
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 13L13 3M13 3H6M13 3V10"/></svg>
+              Install ccbar
+            </a>
+          </div>
+        </BentoCell>
+      </Bento>
+    </Reveal>
+  </section>
+
+  {/* ====================================================================
+   *  PRIVACY — Double-Bezel pull-quote card
+   * ==================================================================== */}
+  <section class="py-16 md:py-24">
+    <Reveal mode="fade-up" client:visible>
+      <div class="card-bezel">
+        <div class="card-bezel-inner !p-10 md:!p-14">
+          <span class="eyebrow accent">Privacy</span>
+          <blockquote
+            class="display mt-6 text-[clamp(28px,4vw,44px)] leading-[1.1] tracking-[-0.022em] text-[var(--color-text)]"
+          >
+            ccbar reads files.{" "}
+            <span class="text-[var(--color-ink)]">It does not write files.</span>{" "}
+            <span class="text-[var(--color-text-dim)]">It does not upload.</span>
+          </blockquote>
+          <p class="mt-6 max-w-[64ch] text-[15.5px] text-[var(--color-text-dim)]">
+            The desktop app opens three things in your <code>~/.claude/</code>
+            folder, only those: per-session JSONL, the rate-limit log, and a
+            directory listing. The <em>only</em> network call ccbar makes is a
+            tiny ping to Anthropic for the live 5h and weekly headers — opt
+            out with <code>CCBAR_LIVE_QUOTA=0</code>.
+          </p>
+          <a href="/privacy" class="text-link mt-6 inline-block">
+            Read the full privacy page →
+          </a>
+        </div>
+      </div>
+    </Reveal>
+  </section>
+
+  {/* ====================================================================
+   *  FINAL CTA — flat ink panel, white type, no glass orbs
+   * ==================================================================== */}
+  <section class="py-16 md:py-24">
+    <Reveal mode="fade-up" client:visible>
+      <div
+        class="relative overflow-hidden rounded-xl bg-[var(--color-ink)] p-10 md:p-16"
+      >
+        <h2 class="display max-w-[20ch] text-[clamp(32px,5vw,56px)] leading-[1.02] tracking-[-0.025em] text-white">
+          Try ccbar in sixty seconds.
+        </h2>
+        <p class="mt-4 max-w-[52ch] text-[16.5px] text-white/75">
+          Build from source on Windows, macOS, or Linux. No accounts to
+          create, nothing to subscribe to.
+        </p>
+        <div class="mt-9 flex flex-wrap items-center gap-3">
+          <a
+            href="/install"
+            class="inline-flex items-center gap-2 rounded-md bg-white px-6 py-3 text-sm font-semibold text-[var(--color-ink)] transition-colors duration-200 hover:bg-[var(--color-bg-soft)] active:scale-[0.98]"
+          >
+            Install ccbar →
+          </a>
+          <a
+            href="/dashboard"
+            class="inline-flex items-center gap-2 rounded-md border border-white/30 px-6 py-3 text-sm font-semibold text-white transition-colors duration-200 hover:bg-white/10"
+          >
+            Peek the dashboard
+          </a>
+        </div>
+      </div>
+    </Reveal>
+  </section>
+</BaseLayout>

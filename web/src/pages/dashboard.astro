@@ -1,0 +1,141 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import AppPreview from "../components/AppPreview.astro";
+import Reveal from "../components/Reveal.tsx";
+---
+
+<BaseLayout title="ccbar — dashboard preview">
+  {/* HERO */}
+  <section class="pt-14 pb-12 md:pt-24 md:pb-16">
+    <Reveal mode="fade-up" client:load className="max-w-[64ch]">
+      <span class="eyebrow">Dashboard preview</span>
+      <h1 class="display mt-6 text-[clamp(40px,6vw,72px)] leading-[0.98] tracking-[-0.025em] text-[var(--color-text)]">
+        What you'll see,{" "}
+        <span class="text-[var(--color-text-dim)]">eventually online.</span>
+      </h1>
+      <p class="mt-6 max-w-[60ch] text-[17px] leading-relaxed text-[var(--color-text-dim)]">
+        For v1 the desktop app will get an opt-in switch:{" "}
+        <em>"sync a slim summary to my account."</em> Flip it, and the same
+        panels show up in your browser — accessible from anywhere.
+      </p>
+    </Reveal>
+  </section>
+
+  {/* FULL DASHBOARD SCREENSHOT — Z-Axis Cascade with subtle rotation */}
+  <section class="py-12 md:py-20">
+    <Reveal mode="scale-pop" client:visible>
+      <div class="rotate-[-1deg] transition-transform duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] hover:rotate-0">
+        <AppPreview
+          variant="full"
+          alt="ccbar full dashboard"
+          caption="The v0 desktop window — v1 will mirror this in a browser."
+        />
+      </div>
+    </Reveal>
+  </section>
+
+  {/* MOSAIC — three crops cascading */}
+  <section class="py-12 md:py-20">
+    <Reveal mode="stagger" client:visible childSelector=".shot-frame">
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-12 md:gap-8">
+        <div class="md:col-span-7 rotate-[1.5deg] transition-transform duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] hover:rotate-0">
+          <AppPreview
+            variant="hero"
+            ratio="auto"
+            caption="Today, with weight."
+            alt="hero panel"
+          />
+        </div>
+        <div class="md:col-span-5 rotate-[-1deg] transition-transform duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] hover:rotate-0">
+          <AppPreview
+            variant="daily"
+            ratio="auto"
+            caption="Thirty days, no axis decoration."
+            alt="daily activity bar chart"
+          />
+        </div>
+        <div class="md:col-span-12 rotate-[0.6deg] transition-transform duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] hover:rotate-0">
+          <AppPreview
+            variant="models"
+            ratio="auto"
+            caption="Four models, four colours, the cost in dollars."
+            alt="models panel"
+          />
+        </div>
+      </div>
+    </Reveal>
+  </section>
+
+  {/* WHAT GETS UPLOADED */}
+  <section class="py-12 md:py-20">
+    <div class="grid grid-cols-1 gap-8 lg:grid-cols-12">
+      <Reveal mode="fade-up" client:visible className="lg:col-span-7">
+        <span class="eyebrow">What v1 sends</span>
+        <h2 class="display mt-5 text-[clamp(28px,4vw,42px)] leading-[1.05] tracking-[-0.022em] text-[var(--color-text)]">
+          Aggregates only — never your prompts.
+        </h2>
+        <ul class="mt-7 space-y-3 text-[15.5px] text-[var(--color-text-dim)]">
+          <li class="flex items-start gap-3">
+            <span class="mt-1.5 inline-block h-1.5 w-1.5 rounded-full bg-[var(--color-ink)]"></span>
+            Per-day token totals (input / output / cache split)
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="mt-1.5 inline-block h-1.5 w-1.5 rounded-full bg-[var(--color-ink)]"></span>
+            Per-model rollup over the last 30 days
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="mt-1.5 inline-block h-1.5 w-1.5 rounded-full bg-[var(--color-ink)]"></span>
+            Quota status (the same one shown in the corner)
+          </li>
+        </ul>
+
+        <h3 class="display mt-10 text-xl text-[var(--color-text)]">
+          What never leaves your machine
+        </h3>
+        <ul class="mt-4 space-y-3 text-[15.5px] text-[var(--color-text-dim)]">
+          <li class="flex items-start gap-3">
+            <span class="mt-1.5 inline-block h-1.5 w-1.5 rounded-full bg-[var(--color-text-faint)]"></span>
+            Conversation text or prompts
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="mt-1.5 inline-block h-1.5 w-1.5 rounded-full bg-[var(--color-text-faint)]"></span>
+            File paths or project names
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="mt-1.5 inline-block h-1.5 w-1.5 rounded-full bg-[var(--color-text-faint)]"></span>
+            Credentials, tokens, or session IDs
+          </li>
+        </ul>
+      </Reveal>
+
+      <Reveal mode="fade-up" client:visible className="lg:col-span-5">
+        <div class="card-bezel">
+          <div class="card-bezel-inner feature">
+            <span class="eyebrow accent">Always visible</span>
+            <p class="mt-4 text-[15.5px] leading-relaxed text-[var(--color-text-dim)]">
+              The desktop app keeps showing you exactly what's about to leave
+              the machine, in plain text, before each sync. No surprises.
+            </p>
+            <div class="mt-6">
+              <AppPreview variant="quota-good" ratio="auto" tight noFrame alt="quota pill" />
+            </div>
+          </div>
+        </div>
+      </Reveal>
+    </div>
+  </section>
+
+  {/* WHEN */}
+  <section class="py-12 md:py-20">
+    <Reveal mode="fade-up" client:visible className="mx-auto max-w-2xl text-center">
+      <span class="eyebrow">When</span>
+      <p class="display mt-5 text-[clamp(24px,3.5vw,36px)] leading-[1.15] tracking-[-0.018em] text-[var(--color-text)]">
+        No date. The desktop app comes first; the online sibling waits its turn.
+      </p>
+      <a href="/signup" class="btn-primary mt-9">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 13L13 3M13 3H6M13 3V10"/></svg>
+        Join the waitlist
+      </a>
+    </Reveal>
+  </section>
+</BaseLayout>

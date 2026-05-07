@@ -1,0 +1,424 @@
+@import url("https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700,800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&display=swap");
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+  /* Brand — warm-bone editorial minimalism. Primary collapses to ink. */
+  --color-primary: #111111;
+  --color-primary-strong: #000000;
+  --color-primary-soft: #efeeea;
+  --color-primary-mid: #4a4a48;
+  --color-secondary: #787774;
+  --color-accent: #9f2f2d;
+  --color-accent-soft: #fdebec;
+
+  /* Surfaces */
+  --color-bg: #f7f6f3;
+  --color-bg-soft: #efeeea;
+  --color-card: #ffffff;
+  --color-card-elev: #ffffff;
+
+  /* Semantic aliases */
+  --color-canvas: #f7f6f3;
+  --color-ink: #111111;
+  --color-muted: #787774;
+  --color-hairline: #eaeaea;
+
+  /* Text */
+  --color-text: #111111;
+  --color-text-dim: #787774;
+  --color-text-faint: #a8a29e;
+
+  /* Borders */
+  --color-border: #eaeaea;
+  --color-border-strong: #d8d6cf;
+  --color-ring: rgba(17, 17, 17, 0.1);
+
+  /* Status (pastel ink foregrounds) */
+  --color-success: #346538;
+  --color-warn: #956400;
+  --color-danger: #9f2f2d;
+
+  /* Muted-pastel pairs */
+  --pastel-red-bg: #fdebec;
+  --pastel-red-fg: #9f2f2d;
+  --pastel-blue-bg: #e1f3fe;
+  --pastel-blue-fg: #1f6c9f;
+  --pastel-green-bg: #edf3ec;
+  --pastel-green-fg: #346538;
+  --pastel-yellow-bg: #fbf3db;
+  --pastel-yellow-fg: #956400;
+
+  /* Family tones — grayscale */
+  --color-opus: #111111;
+  --color-sonnet: #787774;
+  --color-haiku: #c4c4c0;
+
+  /* Typography */
+  --font-display: "Switzer", "Geist", "SF Pro Display", "Helvetica Neue",
+    -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, "SF Mono", Consolas, monospace;
+  --font-sans: var(--font-display);
+}
+
+html,
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.6;
+  letter-spacing: -0.005em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "ss01";
+}
+
+* {
+  box-sizing: border-box;
+}
+
+::selection {
+  background: #111111;
+  color: #f7f6f3;
+}
+
+:where(a) {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ==========================================================================
+ * Typography primitives
+ * ========================================================================== */
+.display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.022em;
+  font-feature-settings: "ss01";
+  line-height: 1.05;
+}
+h1.display,
+.display.h1 {
+  letter-spacing: -0.028em;
+  line-height: 0.96;
+}
+
+.num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+/* Eyebrow — quiet editorial label, not a chip */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  padding: 0;
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  white-space: nowrap;
+}
+.eyebrow.dark {
+  color: var(--color-ink);
+}
+.eyebrow.accent {
+  color: var(--pastel-red-fg);
+}
+
+/* ==========================================================================
+ * Card — flat hairline, max 12px radius
+ * ========================================================================== */
+.card-bezel {
+  border-radius: 12px;
+  background: var(--color-card);
+  border: 1px solid var(--color-hairline);
+  padding: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+.card-bezel-inner {
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  padding: 2rem;
+}
+.card-bezel-inner.tight {
+  padding: 1.25rem;
+}
+.card-bezel-inner.feature {
+  background: var(--color-bg-soft);
+}
+
+/* Top bar pill — flat hairline strip (Masthead) */
+.glass-pill {
+  border-radius: 9999px;
+  background: var(--color-card);
+  border: 1px solid var(--color-hairline);
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+/* Pill chip — tiny status tag (neutral base; callers add !bg-* for tones) */
+.pill-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  background: var(--color-bg-soft);
+  border: 1px solid var(--color-hairline);
+  color: var(--color-text-dim);
+  padding: 2px 12px;
+  font-family: var(--font-display);
+  font-size: 11.5px;
+  font-weight: 500;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+/* ==========================================================================
+ * Buttons — ink solid + hairline secondary
+ * ========================================================================== */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 6px;
+  background: var(--color-ink);
+  color: #fff;
+  padding: 0.7rem 1.2rem;
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: none;
+  transition: background 200ms ease;
+  white-space: nowrap;
+}
+.btn-primary:hover {
+  background: #000000;
+}
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 6px;
+  background: var(--color-card);
+  color: var(--color-ink);
+  padding: 0.6rem 1.2rem;
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+  border: 1px solid var(--color-hairline);
+  box-shadow: none;
+  transition: background 200ms ease, border-color 200ms ease;
+  white-space: nowrap;
+}
+.btn-secondary:hover {
+  background: var(--color-bg-soft);
+  border-color: var(--color-ink);
+}
+.btn-secondary:active {
+  transform: scale(0.98);
+}
+
+/* In-flow text link — hairline underline */
+.text-link {
+  font-weight: 600;
+  color: var(--color-ink);
+  border-bottom: 1px solid var(--color-hairline);
+  transition: border-color 200ms ease;
+}
+.text-link:hover {
+  border-color: var(--color-ink);
+}
+
+/* ==========================================================================
+ * Inputs
+ * ========================================================================== */
+.input-field {
+  display: block;
+  width: 100%;
+  border-radius: 8px;
+  background: var(--color-card);
+  border: 1px solid var(--color-hairline);
+  padding: 0.85rem 1.1rem;
+  font-family: var(--font-display);
+  font-size: 15px;
+  color: var(--color-text);
+  transition: border-color 200ms ease, box-shadow 200ms ease;
+}
+.input-field::placeholder {
+  color: var(--color-text-faint);
+}
+.input-field:focus {
+  outline: none;
+  border-color: var(--color-ink);
+  box-shadow: 0 0 0 3px var(--color-ring);
+}
+
+/* ==========================================================================
+ * Code blocks — pale-yellow editorial inset
+ * ========================================================================== */
+code,
+pre {
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+pre {
+  background: var(--pastel-yellow-bg);
+  color: var(--pastel-yellow-fg);
+  border: 1px solid #f4e9c2;
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  line-height: 1.65;
+  overflow-x: auto;
+  box-shadow: none;
+}
+:not(pre) > code {
+  background: var(--pastel-yellow-bg);
+  color: var(--pastel-yellow-fg);
+  padding: 0.12em 0.42em;
+  border-radius: 4px;
+  font-size: 0.92em;
+}
+
+/* ==========================================================================
+ * Bento grid — gap-based, each cell its own card
+ * ========================================================================== */
+.bento-12 {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-auto-rows: minmax(0, auto);
+  grid-auto-flow: dense;
+  gap: 1rem;
+}
+@media (max-width: 768px) {
+  .bento-12 {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  .bento-12 > * {
+    grid-column: 1 / -1 !important;
+    grid-row: auto !important;
+  }
+}
+
+.grid-zine {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  column-gap: 1.5rem;
+  row-gap: 0;
+}
+@media (max-width: 768px) {
+  .grid-zine {
+    grid-template-columns: 1fr;
+    column-gap: 0;
+  }
+}
+
+/* ==========================================================================
+ * App-screenshot frame — flat hairline, no Double-Bezel
+ * ========================================================================== */
+.shot-frame {
+  border-radius: 12px;
+  background: var(--color-card);
+  padding: 0;
+  border: 1px solid var(--color-hairline);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+.shot-frame.tight {
+  border-radius: 10px;
+}
+.shot-frame > .shot-inner {
+  border-radius: 11px;
+  overflow: hidden;
+}
+.shot-frame.tight > .shot-inner {
+  border-radius: 9px;
+}
+
+/* Hover zoom — gentle scale on screenshot wrappers */
+.hover-zoom {
+  overflow: hidden;
+}
+.hover-zoom > img,
+.hover-zoom > picture > img {
+  transition: transform 700ms cubic-bezier(0.32, 0.72, 0, 1);
+  will-change: transform;
+}
+.hover-zoom:hover > img,
+.hover-zoom:hover > picture > img {
+  transform: scale(1.03);
+}
+
+/* ==========================================================================
+ * Scroll-reveal — Reveal.tsx flips .is-visible
+ * ========================================================================== */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 600ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Inline screenshot swatch — tiny image embedded in body text */
+.inline-shot {
+  display: inline-block;
+  vertical-align: -0.15em;
+  height: 1em;
+  border-radius: 3px;
+  border: 1px solid var(--color-hairline);
+  margin: 0 0.18em;
+}
+
+/* ==========================================================================
+ * Numbered step squares (install page) — ink badge
+ * ========================================================================== */
+.step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 6px;
+  background: var(--color-ink);
+  color: #fff;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 14px;
+  box-shadow: none;
+}
+
+/* ==========================================================================
+ * Soft alert banner — pale-yellow editorial
+ * ========================================================================== */
+.alert-soft {
+  border-radius: 8px;
+  background: var(--pastel-yellow-bg);
+  border: 1px solid #f4e9c2;
+  padding: 1rem 1.25rem;
+  color: var(--pastel-yellow-fg);
+  font-size: 14px;
+  line-height: 1.55;
+}

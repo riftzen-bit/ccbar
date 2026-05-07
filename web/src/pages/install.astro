@@ -1,0 +1,115 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import LiveCheck from "../components/LiveCheck.tsx";
+import Reveal from "../components/Reveal.tsx";
+---
+
+<BaseLayout title="ccbar — install">
+  {/* HERO */}
+  <section class="pt-14 pb-12 md:pt-24 md:pb-16">
+    <Reveal mode="fade-up" client:load className="max-w-[64ch]">
+      <span class="eyebrow">Install</span>
+      <h1 class="display mt-6 text-[clamp(40px,6vw,72px)] leading-[0.98] tracking-[-0.025em] text-[var(--color-text)]">
+        Get it on{" "}
+        <span class="text-[var(--color-text-dim)]">your machine</span>{" "}
+        in 60 seconds.
+      </h1>
+      <p class="mt-6 max-w-[58ch] text-[17px] leading-relaxed text-[var(--color-text-dim)]">
+        v0.1 binaries are not yet cut. Build it from source for now — it's a
+        single Tauri command and the result is a 7&nbsp;MB native app for your
+        OS.
+      </p>
+    </Reveal>
+  </section>
+
+  {/* STEPS */}
+  <section class="py-12 md:py-16">
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-3 md:gap-5">
+      <Reveal mode="fade-up" client:visible delay={0}>
+        <div class="card-bezel h-full">
+          <div class="card-bezel-inner h-full">
+            <span class="step-num">1</span>
+            <h3 class="display mt-5 text-xl text-[var(--color-text)]">Clone</h3>
+            <p class="mt-2 text-[14.5px] leading-relaxed text-[var(--color-text-dim)]">
+              Pull the source from GitHub.
+            </p>
+            <pre class="mt-4 !text-[12px]">{`git clone https://github.com/<you>/ccbar.git
+cd ccbar`}</pre>
+          </div>
+        </div>
+      </Reveal>
+      <Reveal mode="fade-up" client:visible delay={0.08}>
+        <div class="card-bezel h-full">
+          <div class="card-bezel-inner h-full">
+            <span class="step-num">2</span>
+            <h3 class="display mt-5 text-xl text-[var(--color-text)]">Install</h3>
+            <p class="mt-2 text-[14.5px] leading-relaxed text-[var(--color-text-dim)]">
+              pnpm pulls the JS deps; cargo handles Rust on first build.
+            </p>
+            <pre class="mt-4 !text-[12px]">pnpm install</pre>
+          </div>
+        </div>
+      </Reveal>
+      <Reveal mode="fade-up" client:visible delay={0.16}>
+        <div class="card-bezel h-full">
+          <div class="card-bezel-inner h-full">
+            <span class="step-num">3</span>
+            <h3 class="display mt-5 text-xl text-[var(--color-text)]">Build</h3>
+            <p class="mt-2 text-[14.5px] leading-relaxed text-[var(--color-text-dim)]">
+              90 seconds on a warm cargo cache. Native binary lands in{" "}
+              <code>target/release/</code>.
+            </p>
+            <pre class="mt-4 !text-[12px]">pnpm tauri build</pre>
+          </div>
+        </div>
+      </Reveal>
+    </div>
+  </section>
+
+  {/* RUN IT — Live check on the user's actual machine */}
+  <section class="py-12 md:py-20">
+    <div class="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-12">
+      <Reveal mode="fade-up" client:visible className="lg:col-span-5">
+        <span class="eyebrow">Run it</span>
+        <h2 class="display mt-5 text-[clamp(28px,4vw,40px)] leading-[1.05] tracking-[-0.022em] text-[var(--color-text)]">
+          Personalised for your machine.
+        </h2>
+        <p class="mt-5 text-[15.5px] leading-relaxed text-[var(--color-text-dim)]">
+          Once built, just open the app like any desktop binary. ccbar will
+          check for <code>~/.claude/projects/</code> on launch — if it exists
+          and contains at least one session JSONL, you're in.
+        </p>
+        <p class="mt-4 text-[14.5px] leading-relaxed text-[var(--color-text-faint)]">
+          Otherwise the login gate appears and asks you to run{" "}
+          <code>claude</code> once in your terminal to sign into Claude Code.
+        </p>
+        <div class="mt-8 alert-soft">
+          <strong class="text-[var(--pastel-yellow-fg)]">Uninstall is just deleting the binary.</strong>
+          {" "}No registry keys. No leftover dotfiles.
+        </div>
+      </Reveal>
+      <div class="lg:col-span-7">
+        <LiveCheck client:only="react" />
+      </div>
+    </div>
+  </section>
+
+  {/* PREBUILT DOWNLOADS */}
+  <section class="py-12 md:py-20">
+    <Reveal mode="fade-up" client:visible className="mx-auto max-w-2xl text-center">
+      <span class="eyebrow">Prebuilt downloads</span>
+      <h2 class="display mt-5 text-[clamp(24px,3.5vw,36px)] leading-[1.1] tracking-[-0.018em] text-[var(--color-text)]">
+        Coming with v0.1.
+      </h2>
+      <p class="mt-4 text-[15.5px] text-[var(--color-text-dim)]">
+        Windows <code>.exe</code>, macOS <code>.dmg</code>, Linux{" "}
+        <code>.AppImage</code>. Until then, build from source above — or
+        subscribe to the waitlist and we'll email you once.
+      </p>
+      <a href="/signup" class="btn-primary mt-8">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 13L13 3M13 3H6M13 3V10"/></svg>
+        Subscribe to the waitlist
+      </a>
+    </Reveal>
+  </section>
+</BaseLayout>

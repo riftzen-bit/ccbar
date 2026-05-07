@@ -1,0 +1,44 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer
+  class="mt-32 flex flex-col items-start gap-10 border-t border-[var(--color-border)] pt-12 pb-10 md:flex-row md:items-end md:justify-between"
+>
+  <div class="max-w-[48ch]">
+    <div class="flex items-center gap-2">
+      <span
+        class="flex h-7 w-7 items-center justify-center rounded-md bg-[var(--color-ink)]"
+        aria-hidden="true"
+      >
+        <svg width="16" height="16" viewBox="0 0 32 32" fill="none">
+          <rect x="7" y="17" width="4" height="10" fill="#F7F6F3" />
+          <rect x="14" y="12" width="4" height="15" fill="#F7F6F3" />
+          <rect x="21" y="7" width="4" height="20" fill="#F7F6F3" />
+          <rect x="5" y="27" width="22" height="1" fill="#F7F6F3" />
+        </svg>
+      </span>
+      <span class="display text-2xl text-[var(--color-text)]">ccbar</span>
+    </div>
+    <p class="mt-4 text-[14.5px] leading-relaxed text-[var(--color-text-dim)]">
+      A local-first meter for Claude Code. Reads <code>~/.claude/</code> on disk
+      and shows live 5h + weekly windows from the API itself. No accounts. No telemetry.
+    </p>
+  </div>
+  <div class="flex flex-col items-start gap-3 md:items-end">
+    <ul class="flex flex-wrap items-center gap-x-5 gap-y-2 text-[13px] font-medium text-[var(--color-text-dim)]">
+      <li><a href="/install" class="transition hover:text-[var(--color-ink)]">Install</a></li>
+      <li><a href="/dashboard" class="transition hover:text-[var(--color-ink)]">Dashboard</a></li>
+      <li><a href="/privacy" class="transition hover:text-[var(--color-ink)]">Privacy</a></li>
+      <li><a href="/signup" class="transition hover:text-[var(--color-ink)]">Waitlist</a></li>
+      <li>
+        <a href="https://github.com/riftzen-bit/ccbar" rel="noopener" class="transition hover:text-[var(--color-ink)]">
+          GitHub
+        </a>
+      </li>
+    </ul>
+    <span class="num text-[11px] uppercase tracking-widest text-[var(--color-text-faint)]">
+      © {year} · made with care
+    </span>
+  </div>
+</footer>

@@ -1,0 +1,46 @@
+{
+  "name": "ccbar",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Local-first desktop meter for Claude Code and Codex CLI usage",
+  "author": "riftzen-bit <binb53339@gmail.com>",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/riftzen-bit/ccbar",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/riftzen-bit/ccbar.git"
+  },
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:mock": "cross-env VITE_MOCK_TAURI=1 vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "tauri": "tauri",
+    "web:dev": "pnpm --dir web dev",
+    "web:build": "pnpm --dir web build",
+    "web:test": "pnpm --dir web test:visual",
+    "web:capture": "node web/scripts/capture-app-screenshots.mjs"
+  },
+  "dependencies": {
+    "@phosphor-icons/react": "^2.1.10",
+    "@tauri-apps/api": "^2",
+    "@tauri-apps/plugin-opener": "^2",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.38.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "recharts": "^3.8.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.2.4",
+    "@tauri-apps/cli": "^2",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "@vitejs/plugin-react": "^4.6.0",
+    "cross-env": "^7.0.3",
+    "tailwindcss": "^4.2.4",
+    "typescript": "~5.8.3",
+    "vite": "^7.0.4"
+  }
+}

@@ -1,0 +1,216 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import AppPreview from "../components/AppPreview.astro";
+import Reveal from "../components/Reveal.tsx";
+---
+
+<BaseLayout
+  title="ccbar — privacy"
+  description="ccbar reads files. It does not write files. It does not upload — except a tiny ping to Anthropic for live rate-limit headers (opt-out)."
+>
+  {/* HERO — pull-quote treatment */}
+  <section class="pt-14 pb-12 md:pt-24 md:pb-16">
+    <Reveal mode="fade-up" client:load className="mx-auto max-w-4xl text-center">
+      <span class="eyebrow accent">Privacy, plainly</span>
+      <h1
+        class="display mt-6 text-[clamp(36px,5.5vw,68px)] leading-[1.04] tracking-[-0.025em] text-[var(--color-text)]"
+      >
+        ccbar reads files.{" "}
+        <span class="text-[var(--color-ink)]">It does not write files.</span>{" "}
+        <span class="text-[var(--color-text-dim)]">
+          It only uploads one byte: the rate-limit ping you can opt out of.
+        </span>
+      </h1>
+    </Reveal>
+  </section>
+
+  {/* WHAT CCBAR READS */}
+  <section class="py-12 md:py-20">
+    <div class="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-14">
+      <Reveal mode="fade-up" client:visible className="lg:col-span-7">
+        <span class="eyebrow">What ccbar reads</span>
+        <h2 class="display mt-5 text-[clamp(28px,4vw,40px)] leading-[1.05] tracking-[-0.022em] text-[var(--color-text)]">
+          Three files in your <code>~/.claude/</code> folder.
+        </h2>
+        <div class="prose prose-stone mt-7 max-w-none text-[15.5px] leading-relaxed text-[var(--color-text-dim)]">
+          <p>
+            On launch and again every fifteen seconds, ccbar opens three things —
+            and only those — on your local disk. The reads are file-system
+            operations on your own machine.
+          </p>
+          <ol class="mt-5 list-decimal pl-5 marker:text-[var(--color-ink)]">
+            <li class="mt-3">
+              <strong class="text-[var(--color-text)]">Project session files</strong> —{" "}
+              <code>projects/&lt;cwd&gt;/&lt;sessionId&gt;.jsonl</code>. Each
+              line is one chat event. ccbar parses only entries with{" "}
+              <code>type === "assistant"</code> and reads exactly four numeric
+              fields: <code>input_tokens</code>, <code>output_tokens</code>,{" "}
+              <code>cache_creation_input_tokens</code>,{" "}
+              <code>cache_read_input_tokens</code>. The conversation text is
+              ignored.
+            </li>
+            <li class="mt-3">
+              <strong class="text-[var(--color-text)]">Rate-limit log</strong> —{" "}
+              <code>usage.jsonl</code>. ccbar walks this file once and keeps
+              only the most recent entry that has an{" "}
+              <code>anthropic-ratelimit-requests-remaining</code> header.
+            </li>
+            <li class="mt-3">
+              <strong class="text-[var(--color-text)]">Directory listing</strong> —
+              the names of files in <code>projects/</code>, to count sessions.
+              Names only. Contents not opened.
+            </li>
+          </ol>
+        </div>
+      </Reveal>
+      <Reveal mode="fade-up" client:visible className="lg:col-span-5">
+        <div class="card-bezel">
+          <div class="card-bezel-inner feature">
+            <span class="eyebrow">Live</span>
+            <p class="mt-4 text-[14.5px] leading-relaxed text-[var(--color-text-dim)]">
+              The quota chip shown in your tray is the same one that goes
+              italic when more than an hour old. ccbar admits when stale.
+            </p>
+            <div class="mt-5">
+              <AppPreview variant="quota-stale" ratio="auto" tight noFrame alt="stale quota pill" />
+            </div>
+          </div>
+        </div>
+      </Reveal>
+    </div>
+  </section>
+
+  {/* THE LIVE PING — new section, post-Live-Quota policy */}
+  <section class="py-12 md:py-20">
+    <Reveal mode="fade-up" client:visible>
+      <div class="card-bezel">
+        <div class="card-bezel-inner">
+          <span class="eyebrow accent">The one network call</span>
+          <h2 class="display mt-5 text-[clamp(26px,3.6vw,36px)] leading-[1.1] tracking-[-0.022em] text-[var(--color-text)]">
+            A single Haiku ping for live 5h + weekly headers.
+          </h2>
+          <p class="mt-5 max-w-[68ch] text-[15.5px] leading-relaxed text-[var(--color-text-dim)]">
+            For the bars to be accurate, ccbar reads your Claude OAuth token
+            from <code>~/.claude/.credentials.json</code> and sends one minimal
+            request to Anthropic's <code>/v1/messages</code> endpoint
+            (Haiku, <code>max_tokens=1</code>). Anthropic's response carries the{" "}
+            <code>anthropic-ratelimit-unified-5h-utilization</code> and{" "}
+            <code>-7d-utilization</code> headers — that's where the percentages
+            come from. The result is cached for 60 seconds.
+          </p>
+          <p class="mt-4 max-w-[68ch] text-[14.5px] leading-relaxed text-[var(--color-text-faint)]">
+            The token never leaves the HTTPS request. It's not logged. It's not
+            emitted to the frontend. To opt out entirely, set{" "}
+            <code>CCBAR_LIVE_QUOTA=0</code> — the bars stay empty and ccbar
+            falls back to local aggregates.
+          </p>
+        </div>
+      </div>
+    </Reveal>
+  </section>
+
+  {/* CODEX TAB — privacy disclosure for OpenAI provider */}
+  <section class="py-12 md:py-20">
+    <Reveal mode="fade-up" client:visible>
+      <div class="card-bezel">
+        <div class="card-bezel-inner">
+          <span class="eyebrow">Codex tab — same posture, different folder</span>
+          <h2 class="display mt-5 text-[clamp(26px,3.6vw,36px)] leading-[1.1] tracking-[-0.022em] text-[var(--color-text)]">
+            <code>~/.codex/sessions/</code> for history. OAuth for the bar.
+          </h2>
+          <p class="mt-5 max-w-[68ch] text-[15.5px] leading-relaxed text-[var(--color-text-dim)]">
+            For the Codex provider, ccbar walks <code>~/.codex/sessions/**/*.jsonl</code>{" "}
+            and <code>~/.codex/archived_sessions/*.jsonl</code> to aggregate token
+            usage by 5h / 7-day windows. The rate-limit percentages come embedded
+            in the same JSONL (<code>event_msg.token_count.rate_limits</code>)
+            — no extra network call needed for the bars.
+          </p>
+          <p class="mt-4 max-w-[68ch] text-[14.5px] leading-relaxed text-[var(--color-text-faint)]">
+            Sign-in is a separate, optional OAuth flow against{" "}
+            <code>auth.openai.com</code> (loopback on <code>localhost:1455</code>).
+            The resulting token lives at <code>&lt;config&gt;/ccbar/codex-auth.json</code>{" "}
+            with user-only file permissions. We never read{" "}
+            <code>~/.codex/auth.json</code> (Codex CLI's own keystore). The
+            frontend only ever sees <code>{"{ connected, email, expiresAt, sessionCount }"}</code>{" "}
+            — never the bearer.
+          </p>
+          <p class="mt-4 max-w-[68ch] text-[14.5px] leading-relaxed text-[var(--color-text-faint)]">
+            Display convention: Codex CLI shows rate limits as "X% left"
+            (counting down from 100). ccbar's Codex tab matches that convention
+            — bar empties as you consume — so the number always agrees with
+            what <code>codex</code> shows in your terminal.
+          </p>
+        </div>
+      </div>
+    </Reveal>
+  </section>
+
+  {/* WHAT CCBAR REFUSES */}
+  <section class="py-12 md:py-20">
+    <Reveal mode="fade-up" client:visible className="max-w-3xl">
+      <span class="eyebrow">What ccbar refuses to read</span>
+      <h2 class="display mt-5 text-[clamp(26px,3.6vw,36px)] leading-[1.1] tracking-[-0.022em] text-[var(--color-text)]">
+        Credentials live where they live.
+      </h2>
+      <p class="mt-5 text-[15.5px] text-[var(--color-text-dim)]">
+        Some files in <code>~/.claude/</code> contain credentials. ccbar's Rust
+        source has explicit branches that skip them, and the project's
+        instructions to its own contributors forbid reading them outside the
+        live-quota module:
+      </p>
+      <ul class="mt-5 space-y-2.5 text-[15px] text-[var(--color-text-dim)]">
+        <li class="flex items-start gap-3">
+          <span class="mt-2 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--pastel-red-fg)]"></span>
+          <span><code>quota-status/account.json</code> — account-level credentials</span>
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="mt-2 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--pastel-red-fg)]"></span>
+          <span><code>quota-status/sessions/*.json</code> — per-session credential cache</span>
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="mt-2 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--pastel-red-fg)]"></span>
+          <span><code>backups/</code>, <code>cache/</code>, <code>history.jsonl</code>, <code>shell-snapshots/</code></span>
+        </li>
+      </ul>
+    </Reveal>
+  </section>
+
+  {/* VERIFY IT YOURSELF */}
+  <section class="py-12 md:py-20">
+    <Reveal mode="fade-up" client:visible>
+      <div class="text-center">
+        <span class="eyebrow">Verify it yourself</span>
+        <h2 class="display mt-5 text-[clamp(26px,3.6vw,36px)] leading-[1.1] tracking-[-0.022em] text-[var(--color-text)]">
+          Three commands, no faith required.
+        </h2>
+      </div>
+      <pre class="mt-9">{`# 1. No mock data.
+grep -r "mock\\|fake\\|dummy\\|fixture" src-tauri/src/
+# returns nothing.
+
+# 2. Only one HTTP client (reqwest), only used by live_quota.rs.
+cargo tree -p ccbar | grep -iE "reqwest|hyper|surf|ureq"
+# returns reqwest, scoped to one module.
+
+# 3. Run it offline (the desktop reads still work; only live quota is gated).
+CCBAR_LIVE_QUOTA=0 pnpm tauri dev
+# bars stay empty, local token aggregates still render.`}</pre>
+    </Reveal>
+  </section>
+
+  {/* WEBSITE PRIVACY */}
+  <section class="py-12 md:py-20">
+    <Reveal mode="fade-up" client:visible className="mx-auto max-w-3xl">
+      <span class="eyebrow">About this website</span>
+      <h2 class="display mt-5 text-[clamp(24px,3.4vw,34px)] leading-[1.1] tracking-[-0.018em] text-[var(--color-text)]">
+        Static HTML, no analytics.
+      </h2>
+      <p class="mt-5 text-[15.5px] text-[var(--color-text-dim)]">
+        This page is static HTML hosted on a CDN. No analytics, no cookies, no
+        tracking pixels. The fonts come from Google Fonts, which means Google
+        sees your IP when this page loads — that's the only third-party
+        request, and it goes away the day we self-host the woff2 files.
+      </p>
+    </Reveal>
+  </section>
+</BaseLayout>

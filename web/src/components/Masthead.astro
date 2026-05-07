@@ -1,0 +1,52 @@
+---
+const links = [
+  { href: "/install", label: "Install" },
+  { href: "/dashboard", label: "Dashboard" },
+  { href: "/privacy", label: "Privacy" },
+];
+---
+
+<header class="sticky top-4 z-50 flex justify-center pb-3 pt-4 md:pt-6">
+  <div class="glass-pill flex items-center gap-1.5 px-2.5 py-2">
+    <a href="/" class="flex items-center gap-2 px-3 py-1">
+      <span
+        class="flex h-6 w-6 items-center justify-center rounded-md bg-[var(--color-ink)]"
+        aria-hidden="true"
+      >
+        <svg width="14" height="14" viewBox="0 0 32 32" fill="none">
+          <rect x="7" y="17" width="4" height="10" fill="#F7F6F3" />
+          <rect x="14" y="12" width="4" height="15" fill="#F7F6F3" />
+          <rect x="21" y="7" width="4" height="20" fill="#F7F6F3" />
+          <rect x="5" y="27" width="22" height="1" fill="#F7F6F3" />
+        </svg>
+      </span>
+      <span class="display text-[15px] tracking-tight text-[var(--color-text)]">
+        ccbar
+      </span>
+    </a>
+    <span class="hidden h-4 w-px bg-[var(--color-hairline)] md:block"></span>
+    <nav class="hidden items-center gap-1 md:flex">
+      {links.map((l) => (
+        <a
+          href={l.href}
+          class="rounded-md px-3 py-1.5 text-[13.5px] font-medium text-[var(--color-text-dim)] transition-colors duration-200 hover:bg-[var(--color-bg-soft)] hover:text-[var(--color-ink)]"
+        >
+          {l.label}
+        </a>
+      ))}
+    </nav>
+    <a href="/signup" class="btn-primary !py-1.5 !px-3 !text-[12.5px]">
+      <svg
+        width="11"
+        height="11"
+        viewBox="0 0 16 16"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path d="M3 13L13 3M13 3H6M13 3V10" />
+      </svg>
+      Join waitlist
+    </a>
+  </div>
+</header>
